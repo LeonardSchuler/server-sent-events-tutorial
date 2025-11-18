@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Client Test</title>
+</head>
+
+<body>
+    <h1>SSE Test</h1>
+    <div id="output"></div>
+
+    <script>
+        console.log("Connecting to SSE server at http://localhost:9000/...");
+        const es = new EventSource("http://localhost:9000/");
+
+        // Listen for "notice" events
+        es.addEventListener("notice", (event) => {
+            console.log("[notice]", event.data);
+            const div = document.getElementById("output");
+            div.innerHTML += `[notice] ${event.data}<br>`;
+        });
+
+        // Listen for "update" events
+        es.addEventListener("update", (event) => {
+            console.log("[update]", event.data);
+            const div = document.getElementById("output");
+            div.innerHTML += `[update] ${event.data}<br>`;
+        });
+
+        // Listen for generic "message" events
+        es.addEventListener("message", (event) => {
+            console.log("Received message event:");
+            console.log("  id:", event.lastEventId);
+            console.log("  data:", event.data);
+            const div = document.getElementById("output");
+            div.innerHTML += `id: ${event.lastEventId}<br>data: ${event.data}<br><br>`;
+        });
+
+        // Close the connection after 10 seconds
+        setTimeout(() => {
+            console.log("Closing connection...");
+            es.close();
+        }, 10000);
+    </script>
+</body>
+
+</html>
