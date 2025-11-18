@@ -38,7 +38,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Send events every 2 seconds
         event_id = 1
         try:
-            while True:
+            while event_id < 6:
                 msg = f"Hello! This is event {event_id}"
                 data = sse_format(msg, event_id=event_id)
                 print("Sending:", data, sep="\n")
@@ -47,3 +47,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 time.sleep(2)
         except BrokenPipeError:
             print("Client disconnected.")
+        except KeyboardInterrupt:
+            print("Server stopped.")
